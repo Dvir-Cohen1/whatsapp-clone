@@ -12,8 +12,9 @@ module.exports = {
     },
     colors: {
       primary: "#00a884",
-      dark:"#111b21",
-      borderColor:"e9edef",
+      dark: "#111b21",
+      mainTextColor: "#415266",
+      borderColor: "e9edef",
       transparent: "transparent",
       current: "currentColor",
       black: colors.black,
