@@ -1,5 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'); */
+
+@font-face {
+  font-family: "Thin";
+  /*Can be any text*/
+  src: local("Roboto"),
+    url("./assets/fonts/Roboto-Thin.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Light";
+  /*Can be any text*/
+  src: local("Roboto"),
+    url("./assets/fonts/Roboto-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Bold";
+  /*Can be any text*/
+  src: local("Roboto"),
+    url("./assets/fonts/Roboto-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Regular";
+  /*Can be any text*/
+  src: local("Roboto"),
+    url("./assets/fonts/Roboto-Regular.ttf") format("truetype");
+}
+
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  --main-background: linear-gradient(0deg, rgba(228, 226, 222, 1) 85%, #00a884 85%);
+  --main-background-color: #e4e2de;
+  --main-color: #00a884;
+  --box-background: #f0f2f5;
+  font-family: 'Roboto', sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -20,16 +58,33 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  font-family: 'Roboto', sans-serif;
+}
+
+#root {
   min-height: 100vh;
+  background: var(--main-background-color);
+  background: var(--main-background);
+  display: flex;
+  justify-content: center;
+}
+
+#AppWrapper {
+  background-color: #f0f2f5;
+  color: #415266;
+}
+
+#Sidebar {
+  background: #ffffff;
+  width: 40%;
+  color: white;
 }
 
 h1 {
@@ -48,22 +103,26 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
