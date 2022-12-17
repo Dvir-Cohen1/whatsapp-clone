@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useContext, createContext } from "react";
 import { register } from '../services/authentication'
-import { setCookie, getCookie } from '../utils/cookieHandler'
-import { AuthContextType, IuserData } from '../@types/auth';
+import { setCookie } from '../utils/cookieHandler'
+import { RegisterContextType, IuserData } from '../@types/auth';
+import { useNavigate } from 'react-router-dom';
 
-
-const AuthContext = createContext<AuthContextType | null>(null);
+const RegisterContext = createContext<RegisterContextType | null>(null);
 
 export function useAuthContext() {
-  return useContext(AuthContext);
+  return useContext(RegisterContext);
 }
 
 export default function AuthProvider({ children }: any) {
@@ -20,12 +20,12 @@ export default function AuthProvider({ children }: any) {
   })
   const [errorMessage, setErrorMessage] = useState('');
   const [isError, setIsError] = useState(false);
-
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!userData.username || !userData.email || !userData.password) return
     const data = await register(userData);
-
+    
     if (!data.error) {
       setCookie('accessToken', data.token)
       setIsError(true)
@@ -37,11 +37,12 @@ export default function AuthProvider({ children }: any) {
     setTimeout(() => {
       setIsError(false)
     }, 3500);
+
   }
   return (
-    <AuthContext.Provider value={{ userData, setUserData, errorMessage, isError, handleSubmit }}>
+    <RegisterContext.Provider value={{ userData, setUserData, errorMessage, isError, handleSubmit }}>
       {children}
-    </AuthContext.Provider>
+    </RegisterContext.Provider>
   )
 
 }

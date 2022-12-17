@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import AppWrapper from '../components/AppWrapper'
 import { Link } from 'react-router-dom'
-import { useAuthContext } from '../context/authContext'
+import { useAuthContext } from '../context/registerContext'
 // import { register } from '../services/authentication'
 // import { setCookie, getCookie } from '../utils/cookieHandler'
 

@@ -4,13 +4,13 @@ export interface IuserData {
   password: string;
   passwordConfirm: string;
 }
-export type AuthContextType = {
+export type RegisterContextType = {
 //   userData: IuserData,
   userData:object,
   errorMessage: string;
   isError: boolean;
   setIsError: () => {};
   setErrorMessage: () => {};
-  setUserData: () => {};
+  setUserData: (data:object) => {};
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => {};
 };
