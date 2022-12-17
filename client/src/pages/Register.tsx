@@ -1,31 +1,13 @@
 import { useState } from 'react'
 import AppWrapper from '../components/AppWrapper'
 import { Link } from 'react-router-dom'
-import { register } from '../services/authentication'
-import { setCookie, getCookie } from '../utils/cookieHandler'
+import { useAuthContext } from '../context/authContext'
+// import { register } from '../services/authentication'
+// import { setCookie, getCookie } from '../utils/cookieHandler'
+
 
 const Reagister = () => {
-
-  const [userData, setUserData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  })
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isError, setIsError] = useState(false);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!userData.username || !userData.email || !userData.password) return
-    setErrorMessage('User Allready Exist!')
-    setIsError(true)
-    const data = await register(userData);
-    if (data) {
-      setIsError(false)
-      setCookie('accessToken', data.token)
-    }
-  }
-
+  const { userData, setUserData, errorMessage, isError, handleSubmit }: any = useAuthContext();
   return (
     <AppWrapper>
       <div className='flex w-full flex-col justify-center align-middle items-center'>
@@ -51,7 +33,7 @@ const Reagister = () => {
 
               <div>
                 <label className="text-gray-700 dark:text-gray-200" htmlFor="passwordConfirmation">Password Confirmation</label>
-                <input id="passwordConfirmation" type="password" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
+                <input required onChange={(e) => setUserData({ ...userData, passwordConfirm: e.target.value })} id="passwordConfirmation" type="password" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
               </div>
             </div>
 
