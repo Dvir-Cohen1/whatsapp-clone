@@ -2,6 +2,8 @@ import { useState } from 'react'
 import AppWrapper from '../components/AppWrapper'
 import { Link } from 'react-router-dom'
 import { register } from '../services/authentication'
+import { setCookie, getCookie } from '../utils/cookieHandler'
+
 const Reagister = () => {
 
   const [userData, setUserData] = useState({
@@ -9,16 +11,25 @@ const Reagister = () => {
     email: '',
     password: '',
   })
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isError, setIsError] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!userData.username || !userData.email || !userData.password) return
-    register(userData)
+    setErrorMessage('User Allready Exist!')
+    setIsError(true)
+    const data = await register(userData);
+    if (data) {
+      setIsError(false)
+      setCookie('accessToken', data.token)
+    }
   }
 
   return (
     <AppWrapper>
       <div className='flex w-full flex-col justify-center align-middle items-center'>
+        {isError && <p className='text-red-600 pb-5'>{errorMessage}</p>}
         <section className="max-w-4xl mb-5 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">Register</h2>
           <form onSubmit={(event) => handleSubmit(event)}>

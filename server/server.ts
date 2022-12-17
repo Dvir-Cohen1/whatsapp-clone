@@ -6,26 +6,33 @@ import initialMongoConnection from "./config/database";
 import cors from "cors";
 
 const app = express();
-require("dotenv").config();
+import * as dotenv from "dotenv";
+import authRoute from "./routes/authentication.routes";
+// import authRoute from './routes/authRoute.js';
 
+dotenv.config({ path: "./.env" }); // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 
 const httpServer = createServer(app);
 initialMongoConnection();
 
 app.use(cors());
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.status(200).json("Server Running!");
+});
 
-const routes = require("./routes/index");
-app.use(routes);
+app.use(authRoute);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
   },
 });
 
 // io.on("connection", socketMain);
 
-const port = process.env.PORT || 9000;
+const SOCKER_SERVER_PORT = process.env.PORT || 9000;
+const SERVER_PORT = 8100;
 
-httpServer.listen(port);
+httpServer.listen(SOCKER_SERVER_PORT);
+app.listen(SERVER_PORT, () => console.log(`Running on port ${SERVER_PORT}`));
