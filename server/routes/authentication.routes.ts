@@ -7,6 +7,11 @@ router.post("/login");
 router.post("/register", register);
 router.get("/test", (req, res, next) => {
   next(new UnauthorizeError());
+  //   try {
+  //     throw Error;
+  //   } catch (error) {
+  //     next(error);
+  //   }
 });
 router.delete("/logout");
 

@@ -1,17 +1,17 @@
 export class NotFoundError extends Error {
-  constructor() {
-    super("Not found");
+  constructor(message?: string) {
+    super(message || "Not Found");
   }
 }
 
 export class UnauthorizeError extends Error {
-  constructor() {
-    super("Unauthorize");
+  constructor(message?: string) {
+    super(message || "Unauthorize");
   }
 }
 
 export class BadRequestError extends Error {
-  constructor() {
-    super("Bad request");
+  constructor(message?: string) {
+    super(message || "Bad Request");
   }
 }

@@ -9,8 +9,8 @@ export type RegisterContextType = {
   userData:object,
   errorMessage: string;
   isError: boolean;
-  setIsError: () => {};
-  setErrorMessage: () => {};
-  setUserData: (data:object) => {};
+  setIsError: Function;
+  setErrorMessage: Function;
+  setUserData: Function;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => {};
 };

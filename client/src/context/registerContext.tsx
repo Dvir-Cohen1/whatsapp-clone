@@ -38,8 +38,9 @@ export default function AuthProvider({ children }: any) {
     }, 3500);
 
   }
+
   return (
-    <RegisterContext.Provider value={{ userData, setUserData, errorMessage, isError, handleSubmit }}>
+    <RegisterContext.Provider value={{ setIsError, userData, setUserData, errorMessage, setErrorMessage, isError, handleSubmit }}>
       {children}
     </RegisterContext.Provider>
   )

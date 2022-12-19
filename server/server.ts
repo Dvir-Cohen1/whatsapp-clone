@@ -6,7 +6,7 @@ import cors from "cors";
 import routes from "./routes/index";
 import * as dotenv from "dotenv";
 import { errorHandler } from "./errors/errorHandler";
-
+// import ErrorHandler from "./middlewares/ErrorHandler";
 dotenv.config({ path: "./.env" });
 
 const app = express();
@@ -18,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(routes);
 app.use(errorHandler);
+// app.use(ErrorHandler)
 
 const io = new Server(httpServer, {
   cors: {
