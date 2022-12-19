@@ -2,7 +2,7 @@ import User from "../models/user.model";
 import {
   generateToken,
   generateRefreshToken,
-} from "../middlewares/token.middleware";
+} from "../helpers/token.middleware";
 
 export const register = async (req: any, res: any, next: any) => {
   try {
