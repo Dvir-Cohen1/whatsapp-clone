@@ -9,10 +9,10 @@ const userSchema = new Schema<IUser>({
   password: {
     type: String,
     require: true,
-    validate: {
-      validator: isPasswordValid,
-      message: "Please Provide valid password.",
-    },
+    // validate: {
+    //   validator: isPasswordValid,
+    //   message: "Please Provide valid password.",
+    // },
   },
   jwt_ac_token: { type: String },
   jwt_rf_token: { type: String },
@@ -24,9 +24,14 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.methods.isPasswordCorrect = async function (userPassword: string) {
-  return await bcrypt.compare(userPassword, this.password);
+userSchema.methods.comparePassword = async function (plainPassword: string) {
+  const isMatch = await bcrypt.compare(plainPassword, this.password);
+  return isMatch;
 };
+
+// userSchema.methods.isPasswordCorrect = async function (userPassword: string) {
+//   return await bcrypt.compare(userPassword, this.password);
+// };
 
 const User = model<IUser>("User", userSchema);
 

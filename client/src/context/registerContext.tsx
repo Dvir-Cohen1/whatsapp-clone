@@ -26,7 +26,7 @@ export default function AuthProvider({ children }: any) {
     const data = await register(userData);
 
     if (!data.error) {
-      setCookie('accessToken', data.token)
+      // setCookie('accessToken', data.token)
       setIsError(true)
       setErrorMessage('User created successfully!')
     } else {

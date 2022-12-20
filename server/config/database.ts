@@ -14,7 +14,7 @@ const initialMongoConnection = () => {
   mongoose.set("strictQuery", false);
   mongoose
     .connect(uri, {
-      autoIndex: true, //make this also true
+      autoIndex: true,
     })
     .then(() =>
       console.log("Mongo DB database connection established successfully")
