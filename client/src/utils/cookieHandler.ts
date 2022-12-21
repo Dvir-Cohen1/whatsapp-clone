@@ -1,9 +1,10 @@
 import Cookies from "universal-cookie";
 export function getCookie(name: String) {
-  const cookies = new Cookies();
-  return cookies.get(String(name));
+  return new Cookies().get(String(name));
 }
 export function setCookie(name: String, value: String): void {
-  const cookies = new Cookies();
-  cookies.set(String(name), value);
+  return new Cookies().set(String(name), value);
+}
+export function removeCookie(name: String): void {
+  return new Cookies().remove(String(name));
 }

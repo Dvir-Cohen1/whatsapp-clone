@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 
-import AuthProvider from './context/registerContext'
+import AuthProvider from './context/authContext'
 
 import './assets/fonts/Roboto-Black.ttf'
 import './assets/fonts/Roboto-Bold.ttf'
