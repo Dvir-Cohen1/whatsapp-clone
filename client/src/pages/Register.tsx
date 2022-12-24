@@ -7,14 +7,14 @@ import { useAuthContext } from '../context/authContext'
 
 
 const Reagister = () => {
-  const { userData, setUserData, errorMessage, isError, handleSubmit }: any = useAuthContext();
+  const { userData, setUserData, alertMessage,isAlertMessage, handleRegister }: any = useAuthContext();
   return (
     <AppWrapper>
       <div className='flex w-full flex-col justify-center align-middle items-center'>
-        {isError && <p className='text-red-600 pb-5'>{errorMessage}</p>}
+        {isAlertMessage && <p className='text-red-600 pb-5'>{alertMessage}</p>}
         <section className="max-w-4xl mb-5 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">Register</h2>
-          <form onSubmit={(event) => handleSubmit(event)}>
+          <form onSubmit={handleRegister}>
             <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
               <div>
                 <label className="text-gray-700 dark:text-gray-200" htmlFor="username">Username</label>

@@ -18,8 +18,7 @@ export async function login(userData: Object) {
     const { data } = await axios.post(`${SERVER_URL}auth/login`, {
       userData,
     });
-    setCookie("accessToken", data.token);
-    console.log(data);
+    setCookie("accessToken", data.accessToken || null);
     return data;
   } catch (error: any) {
     return { ...error.response.data };

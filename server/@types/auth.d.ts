@@ -6,4 +6,6 @@ export interface IUser {
   jwt_ac_token?: string;
   jwt_rf_token?: string;
   comparePassword: Function;
+  setJwtTokens: Function;
+  setAccessToken: Function;
 }

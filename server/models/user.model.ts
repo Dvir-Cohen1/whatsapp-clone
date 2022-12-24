@@ -29,9 +29,25 @@ userSchema.methods.comparePassword = async function (plainPassword: string) {
   return isMatch;
 };
 
-// userSchema.methods.isPasswordCorrect = async function (userPassword: string) {
-//   return await bcrypt.compare(userPassword, this.password);
-// };
+userSchema.methods.setJwtTokens = function (
+  accessToken: string,
+  refreshToken: string
+) {
+  this.jwt_ac_token = accessToken;
+  this.jwt_rf_token = refreshToken;
+  this.save();
+};
+
+userSchema.methods.setAccessToken = function (accessToken: string) {
+  this.jwt_ac_token = accessToken;
+  this.save();
+};
+
+userSchema.methods.isUserAlreadyExist = function (username: string) {
+  const user = User.exists({
+    username: username,
+  });
+};
 
 const User = model<IUser>("User", userSchema);
 

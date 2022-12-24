@@ -1,8 +1,14 @@
-import yup from "yup";
+import * as yup from "yup";
+import { passwordRegex } from "../password.validator";
 
-const loginRequestSchema = yup.object().shape({
+const registerRequestSchema = new yup.ObjectSchema().shape({
+  username: yup.string().required(),
+  email: yup.string().required(),
+  password: yup.string().required().matches(passwordRegex),
+});
+const loginRequestSchema = new yup.ObjectSchema().shape({
   username: yup.string().required(),
   password: yup.string().required(),
 });
 
-module.exports = { loginRequestSchema };
+export { loginRequestSchema, registerRequestSchema };

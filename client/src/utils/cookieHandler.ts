@@ -6,5 +6,6 @@ export function setCookie(name: String, value: String): void {
   return new Cookies().set(String(name), value);
 }
 export function removeCookie(name: String): void {
-  return new Cookies().remove(String(name));
+  const cookie = new Cookies
+  return cookie.remove(String(name));
 }

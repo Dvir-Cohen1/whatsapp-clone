@@ -4,29 +4,21 @@ import AppWrapper from '../components/AppWrapper'
 import { useState } from 'react'
 import { login } from '../services/authentication'
 import { Navigate } from "react-router-dom";
-
+import { useAuthContext } from '../context/authContext'
+import Button from '../components/Button'
 
 const Login = () => {
-  const [logindata, setLoginData] = useState({
-    username: '',
-    password: '',
-  })
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!logindata.username || !logindata.password) return
-    const data = await login(logindata);
-    return <Navigate replace to="/" />;
-    console.log(data)
-  }
+  const { setLoginData, logindata, alertMessage, isAlertMessage, handleLogin }: any = useAuthContext();
 
   return (
     <AppWrapper>
       <div className='flex w-full flex-col justify-center align-middle items-center'>
+        {isAlertMessage && <Button/>}
+        
         <section className="max-w-4xl mb-5 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">Login</h2>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleLogin}>
             <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
               <div>
                 <label className="text-gray-700 dark:text-gray-200" htmlFor="username">Username</label>

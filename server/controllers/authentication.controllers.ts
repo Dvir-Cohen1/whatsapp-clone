@@ -1,6 +1,6 @@
 import User from "../models/user.model";
 import {
-  generateToken,
+  generateAccessToken,
   generateRefreshToken,
 } from "../helpers/token.middleware";
 import {
@@ -9,65 +9,64 @@ import {
   NotFoundError,
   UnauthorizeError,
 } from "../errors/Error";
+import {
+  registerRequestSchema,
+  loginRequestSchema,
+} from "../validator/schema/authRequests";
+import { validateRequest } from "../validator/request.validator";
 
 export const register = async (req: any, res: any, next: any) => {
   try {
-    const { username, email, password, passwordConfirm } = req.body.userData;
+    const { username, password, passwordConfirm } = req.body.userData;
 
-    if (!username && !email && !password) {
-      return res.status(400).json({ error: true, message: "Bad Request" });
-    }
+    if (password !== passwordConfirm) return next(new BadRequestError("Password dont match!"));
+    
 
-    if (password !== passwordConfirm) {
-      res.send({ error: true, message: "Password dont match!" }).status(400);
-    }
+    await validateRequest(registerRequestSchema, req.body.userData, next);
 
     const isUserExist = await User.exists({
       username: username,
     });
 
-    if (isUserExist) {
-      res.send({ error: true, message: "User already Exist!" }).status(400);
-    } else {
-      await User.create({ ...req.body.userData });
-      res.status(201).json({
-        error: false,
-        message: "User Created Successfully",
-        // token,
-      });
-    }
-  } catch (error) {
-    next(new ServerError());
+    if (isUserExist) return next(new BadRequestError("User already Exist!"));
+
+    await User.create({ ...req.body.userData });
+
+    return res
+      .status(201)
+      .json({ error: false, message: "User Created Successfully" });
+  } catch (error: any) {
+    next(new ServerError(error));
   }
 };
 
 export async function login(req: any, res: any, next: any) {
   try {
     const { username, password } = req.body.userData;
-    if (!username && !password) return next(new BadRequestError());
+    // if (!username && !password) return next(new BadRequestError());
+    await validateRequest(loginRequestSchema, req.body.userData, next);
+    // await validateRequest(loginRequestSchema, { username, password }, next);
 
     // get the user
     const user = await User.findOne({ username: username });
-    if (!user) return next(new NotFoundError());
-    // validate password
-    const isPasswordMatch = await user.comparePassword(password);
-    if (!isPasswordMatch) next(new UnauthorizeError());
+    if (!user) return next(new NotFoundError('User not found'));
 
-    const token = generateToken(user.id);
+    // validate password
+    const isPasswordCorrect = await user.comparePassword(password);
+    if (!isPasswordCorrect) return next(new UnauthorizeError('Username or password incorrect'));
+
+    const accessToken = generateAccessToken(user.id);
     const refreshToken = generateRefreshToken(user.id);
 
-    user.jwt_ac_token = token;
-    user.jwt_rf_token = refreshToken;
-    user.save();
+    user.setJwtTokens(accessToken, refreshToken);
 
     res.status(200).json({
       error: false,
       message: "Logged in successfully",
-      token,
+      accessToken,
     });
-
-  } catch (error) {
-    next(new ServerError());
+  } catch (error: any) {
+    next(new ServerError(error));
   }
 }
 
