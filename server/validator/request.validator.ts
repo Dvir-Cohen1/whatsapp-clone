@@ -6,6 +6,7 @@ export async function validateRequest(
   next: Function
 ) {
   const isValid = await requestSchema.isValid(requestBody);
-  if (!isValid)
+  if (!isValid) {
     return next(new BadRequestError("Bad requset"));
+  }
 }

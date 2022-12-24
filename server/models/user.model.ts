@@ -32,22 +32,23 @@ userSchema.methods.comparePassword = async function (plainPassword: string) {
 userSchema.methods.setJwtTokens = function (
   accessToken: string,
   refreshToken: string
-) {
+): void {
   this.jwt_ac_token = accessToken;
   this.jwt_rf_token = refreshToken;
   this.save();
 };
 
-userSchema.methods.setAccessToken = function (accessToken: string) {
+userSchema.methods.setAccessToken = function (accessToken: string): void {
   this.jwt_ac_token = accessToken;
   this.save();
 };
 
-userSchema.methods.isUserAlreadyExist = function (username: string) {
-  const user = User.exists({
-    username: username,
-  });
-};
+// userSchema.methods.isUserAlreadyExist = function (username: string) {
+//   const user = User.exists({
+//     username: username,
+//   });
+//   return console.log(user);
+// };
 
 const User = model<IUser>("User", userSchema);
 

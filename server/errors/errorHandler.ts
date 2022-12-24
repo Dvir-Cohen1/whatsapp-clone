@@ -33,7 +33,6 @@ export function errorHandler(error: Error, req: any, res: any, next: any) {
       return generateCustomErrorResponse(res, error, 400);
 
     default:
-      res.status(500).json(new ServerError());
-      break;
+      return res.status(500).json(new ServerError());
   }
 }
