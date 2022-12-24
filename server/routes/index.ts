@@ -11,10 +11,10 @@ router.get("/", (req, res) => {
 
 
 router.get("/onlyToken", authJwtToken, (req, res) => {
-  res.send("you can see me only if you have a token");
+  return res.send("you can see me only if you have a token");
 });
-
 router.use("/auth", authRoutes);
+
 router.all("*", (req, res, next) => {
   next(new NotFoundError());
 });

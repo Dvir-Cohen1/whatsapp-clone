@@ -1,28 +1,27 @@
 import {
-  generateAccessToken,
-  generateRefreshToken,
   verifyAccessToken,
 } from "../helpers/token.helper";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { UnauthorizeError } from "../errors/Error";
-import { PreMiddlewareFunction } from "mongoose";
+import { createNewAccessToken } from "../controllers/authentication.controllers";
 
-export const authJwtToken = (req: any, res: any, next: any) => {
+
+export const authJwtToken = async (req: any, res: any, next: any) => {
   try {
-    const token = req.headers["access-token"];
-    console.log(token)
-    if (!token) return res.sendStatus(401);
-    const decodedToken = verifyAccessToken(token);
+    const token = req.cookies.accessToken;
+    if (!token) return next(new UnauthorizeError());
+    verifyAccessToken(token);
     next();
   } catch (error) {
-    console.log(error instanceof JsonWebTokenError);
     if (error instanceof TokenExpiredError) {
-      // Home work
-      console.log("first");
-      // CREATE LOGIC
+      return await createNewAccessToken(req, res, next);
     }
     if (error instanceof JsonWebTokenError) {
-      return next(new UnauthorizeError());
+      return next(new UnauthorizeError(error.message));
     }
   }
 };
+
+// - add route + plus controller that create new access token case on refresh token
+
+// - when access token expired then the middleware will create one for them and set as well

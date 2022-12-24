@@ -6,6 +6,7 @@ import cors from "cors";
 import routes from "./routes/index";
 import * as dotenv from "dotenv";
 import { errorHandler } from "./errors/errorHandler";
+import cookieParser from 'cookie-parser';
 // import ErrorHandler from "./middlewares/ErrorHandler";
 dotenv.config({ path: "./.env" });
 
@@ -16,6 +17,7 @@ const SERVER_PORT = 8100;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(routes);
 app.use(errorHandler);
 // app.use(ErrorHandler)

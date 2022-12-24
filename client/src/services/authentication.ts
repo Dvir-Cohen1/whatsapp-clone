@@ -19,6 +19,7 @@ export async function login(userData: Object) {
       userData,
     });
     setCookie("accessToken", data.accessToken || null);
+    setCookie("refreshToken", data.refreshToken || null);
     return data;
   } catch (error: any) {
     return { ...error.response.data };
