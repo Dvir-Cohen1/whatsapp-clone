@@ -2,16 +2,17 @@ import { useState } from 'react'
 import AppWrapper from '../components/AppWrapper'
 import { Link } from 'react-router-dom'
 import { useAuthContext } from '../context/authContext'
+import Toast from '../components/Toast'
 // import { register } from '../services/authentication'
 // import { setCookie, getCookie } from '../utils/cookieHandler'
 
 
 const Reagister = () => {
-  const { userData, setUserData, alertMessage,isAlertMessage, handleRegister }: any = useAuthContext();
+  const { userData, setUserData, alertMessage, isAlertMessage, handleRegister }: any = useAuthContext();
   return (
     <AppWrapper>
       <div className='flex w-full flex-col justify-center align-middle items-center'>
-        {isAlertMessage && <p className='text-red-600 pb-5'>{alertMessage}</p>}
+        {isAlertMessage && <Toast>{alertMessage}</Toast>}
         <section className="max-w-4xl mb-5 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">Register</h2>
           <form onSubmit={handleRegister}>

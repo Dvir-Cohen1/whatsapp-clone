@@ -1,8 +1,9 @@
 import React from 'react'
+import { IappProps } from '../@types/auth'
 
-const Button = () => {
+const Button = ({ children }: IappProps) => {
   return (
-    <button className='bg-blue-500 px-5 py-3'>Click me</button>
+    <button className='bg-blue-500 px-5 py-3'>{children}</button>
   )
 }
 
