@@ -15,24 +15,23 @@ import {
 } from "../validator/schema/authRequests";
 import { validateRequest } from "../validator/request.validator";
 import { verifyAccessToken } from "../helpers/token.helper";
+import { getCookieValue } from "../helpers/cookies.helper";
+import { IController } from "../@types/auth";
 
 export const register = async (req: any, res: any, next: any) => {
   try {
+
     const { username, password, passwordConfirm } = req.body.userData;
-    const isUserAlreadyExist = await User.exists({
-      username: username,
-    });
+    if (password !== passwordConfirm) return next(new BadRequestError("Password dont match!"));
 
-    if (password !== passwordConfirm)
-      return next(new BadRequestError("Password dont match!"));
-
-    if (isUserAlreadyExist) {
-      return next(new BadRequestError("User name already exist!"));
-    }
+    const isUserAlreadyExist = await User.exists(username);
+    if (isUserAlreadyExist) return next(new BadRequestError("User name already exist!"));
+    
     await validateRequest(registerRequestSchema, req.body.userData, next);
     await User.create({ ...req.body.userData });
 
     res.status(201).json({ error: true, message: "User Created Successfully" });
+
   } catch (error: any) {
     console.log(error);
     return next(new ServerError(error));
@@ -51,11 +50,10 @@ export async function login(req: any, res: any, next: any) {
 
     // validate password
     const isPasswordCorrect = await user.comparePassword(password);
-    if (!isPasswordCorrect)
-      return next(new UnauthorizeError("Username or password incorrect"));
+    if (!isPasswordCorrect) return next(new UnauthorizeError("Username or password incorrect"));
 
-    const accessToken = generateAccessToken(user.id);
-    const refreshToken = generateRefreshToken(user.id);
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
 
     user.setJwtTokens(accessToken, refreshToken);
 
@@ -68,6 +66,7 @@ export async function login(req: any, res: any, next: any) {
       accessToken,
       refreshToken,
     });
+    
   } catch (error: any) {
     next(new ServerError(error.message));
   }
@@ -75,17 +74,12 @@ export async function login(req: any, res: any, next: any) {
 
 export async function logout(req: any, res: any, next: any) {
   try {
-    const accessToken = req.cookies;
-    console.log(accessToken);
+    const accessToken = req.body.accessToken;
     const user = await User.findOne({ jwt_ac_token: accessToken });
 
     if (!user) return next(new NotFoundError("No Such User"));
+    user.deleteTokens();
 
-    user.jwt_ac_token = undefined;
-    user.jwt_rf_token = undefined;
-    user.save();
-    // delete req.cookies.accessToken;
-    // delete req.cookies.refreshToken;
     res.status(200).json({
       error: false,
       message: "Logged out successfully",
@@ -97,11 +91,11 @@ export async function logout(req: any, res: any, next: any) {
 
 export async function createNewAccessToken(req: any, res: any, next: any) {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken = getCookieValue(req.headers.cookie, "refreshToken");
     if (!refreshToken) return next(new UnauthorizeError());
 
     const user = await User.findOne({ jwt_rf_token: refreshToken });
-    if (!user) return next(new UnauthorizeError("asdasd"));
+    if (!user) return next(new UnauthorizeError());
 
     verifyAccessToken(refreshToken);
 
@@ -114,3 +108,10 @@ export async function createNewAccessToken(req: any, res: any, next: any) {
     return next(new ServerError(error.message));
   }
 }
+
+// TODO - create function that return logged in user.
+export function getLoggedInUser(
+  req: IController,
+  res: IController,
+  next: IController
+) {}

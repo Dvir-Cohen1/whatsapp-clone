@@ -28,14 +28,15 @@ export async function login(userData: Object) {
 
 export async function logout() {
   try {
-    const accessTokenCookie = getCookie("accessToken");
-    if (!accessTokenCookie) return;
+    const accessToken = getCookie("accessToken");
+    if (!accessToken) return;
 
     await axios.delete(`${SERVER_URL}auth/logout`, {
-      data: { accessTokenCookie },
+      data: { accessToken },
     });
 
-    removeCookie("accessToken");
+    // removeCookie("accessToken");
+    removeCookie("refreshToken");
   } catch (error: any) {
     return { ...error.response.data };
   }

@@ -1,9 +1,9 @@
 import { Schema, model } from "mongoose";
 import { isPasswordValid } from "../validator/password.validator";
-import { IUser } from "../@types/auth";
+import { IUserSchema } from "../@types/auth";
 const bcrypt = require("bcrypt");
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUserSchema>({
   username: { type: String, require: true, unique: true },
   email: { type: String, require: true, unique: true },
   password: {
@@ -43,13 +43,12 @@ userSchema.methods.setAccessToken = function (accessToken: string): void {
   this.save();
 };
 
-// userSchema.methods.isUserAlreadyExist = function (username: string) {
-//   const user = User.exists({
-//     username: username,
-//   });
-//   return console.log(user);
-// };
+userSchema.methods.deleteTokens = function (): void {
+  delete this.jwt_ac_token;
+  delete this.jwt_rf_token;
+  this.save();
+};
 
-const User = model<IUser>("User", userSchema);
+const User = model<IUserSchema>("User", userSchema);
 
 export default User;

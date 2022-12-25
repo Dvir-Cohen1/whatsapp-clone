@@ -1,5 +1,5 @@
 // User interface
-export interface IUser {
+export interface IUserSchema {
   username: string;
   email: string;
   password: string;
@@ -8,4 +8,10 @@ export interface IUser {
   comparePassword: Function;
   setJwtTokens: Function;
   setAccessToken: Function;
+  deleteTokens: Function;
 }
+export interface IController {
+  callback: ControllerFunction;
+}
+
+export type ControllerFunction = (req: any, res: any, next: Function) => {};
