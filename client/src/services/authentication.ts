@@ -35,8 +35,8 @@ export async function logout() {
       data: { accessToken },
     });
 
-    // removeCookie("accessToken");
-    removeCookie("refreshToken");
+    removeCookie("accessToken");
+    // removeCookie("refreshToken");
   } catch (error: any) {
     return { ...error.response.data };
   }

@@ -24,7 +24,7 @@ export const register = async (req: any, res: any, next: any) => {
     const { username, password, passwordConfirm } = req.body.userData;
     if (password !== passwordConfirm) return next(new BadRequestError("Password dont match!"));
 
-    const isUserAlreadyExist = await User.exists(username);
+    const isUserAlreadyExist = await User.exists({username});
     if (isUserAlreadyExist) return next(new BadRequestError("User name already exist!"));
     
     await validateRequest(registerRequestSchema, req.body.userData, next);

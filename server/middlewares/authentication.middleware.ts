@@ -7,9 +7,9 @@ import { getCookieValue } from "../helpers/cookies.helper";
 export const authJwtToken = async (req: any, res: any, next: any) => {
   try {
     const accessToken = getCookieValue(req.headers.cookie, "accessToken");
-    const refreshToken = getCookieValue(req.headers.cookie, "refreshToken");
+    // const refreshToken = getCookieValue(req.headers.cookie, "refreshToken");
 
-    if (!refreshToken) return next(new UnauthorizeError());
+    if (!accessToken) return next(new UnauthorizeError());
 
     const decoded = verifyAccessToken(accessToken);
     req.user = decoded
@@ -25,7 +25,3 @@ export const authJwtToken = async (req: any, res: any, next: any) => {
     }
   }
 };
-
-// - add route + plus controller that create new access token case on refresh token
-
-// - when access token expired then the middleware will create one for them and set as well
