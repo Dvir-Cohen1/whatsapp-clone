@@ -6,12 +6,11 @@ import Toast from '../components/Toast'
 
 const Login = () => {
   const { setLoginData, logindata, alertMessage, isAlertMessage, handleLogin }: any = useAuthContext();
-
   return (
     <AppWrapper>
       <div className='flex w-full flex-col justify-center align-middle items-center'>
         {isAlertMessage && <Toast>{alertMessage}</Toast>}
-        
+
         <section className="max-w-4xl mb-5 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">Login</h2>
 

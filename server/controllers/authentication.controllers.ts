@@ -17,28 +17,33 @@ import { validateRequest } from "../validator/request.validator";
 import { verifyAccessToken } from "../helpers/token.helper";
 import { getCookieValue } from "../helpers/cookies.helper";
 import { IController } from "../@types/auth";
+import { Request, Response, NextFunction } from "express";
 
-export const register = async (req: any, res: any, next: any) => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-
     const { username, password, passwordConfirm } = req.body.userData;
-    if (password !== passwordConfirm) return next(new BadRequestError("Password dont match!"));
+    if (password !== passwordConfirm)
+      return next(new BadRequestError("Password dont match!"));
 
-    const isUserAlreadyExist = await User.exists({username});
-    if (isUserAlreadyExist) return next(new BadRequestError("User name already exist!"));
-    
+    const isUserAlreadyExist = await User.exists({ username });
+    if (isUserAlreadyExist)
+      return next(new BadRequestError("User name already exist!"));
+
     await validateRequest(registerRequestSchema, req.body.userData, next);
     await User.create({ ...req.body.userData });
 
     res.status(201).json({ error: true, message: "User Created Successfully" });
-
   } catch (error: any) {
     console.log(error);
     return next(new ServerError(error));
   }
 };
 
-export async function login(req: any, res: any, next: any) {
+export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     await validateRequest(loginRequestSchema, req.body.userData, next);
 
@@ -50,7 +55,8 @@ export async function login(req: any, res: any, next: any) {
 
     // validate password
     const isPasswordCorrect = await user.comparePassword(password);
-    if (!isPasswordCorrect) return next(new UnauthorizeError("Username or password incorrect"));
+    if (!isPasswordCorrect)
+      return next(new UnauthorizeError("Username or password incorrect"));
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
@@ -66,13 +72,12 @@ export async function login(req: any, res: any, next: any) {
       accessToken,
       refreshToken,
     });
-    
   } catch (error: any) {
     next(new ServerError(error.message));
   }
 }
 
-export async function logout(req: any, res: any, next: any) {
+export async function logout(req: Request, res: Response, next: NextFunction) {
   try {
     const accessToken = req.body.accessToken;
     const user = await User.findOne({ jwt_ac_token: accessToken });
@@ -89,7 +94,11 @@ export async function logout(req: any, res: any, next: any) {
   }
 }
 
-export async function createNewAccessToken(req: any, res: any, next: any) {
+export async function createNewAccessToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const refreshToken = getCookieValue(req.headers.cookie, "refreshToken");
     if (!refreshToken) return next(new UnauthorizeError());
@@ -110,8 +119,13 @@ export async function createNewAccessToken(req: any, res: any, next: any) {
 }
 
 // TODO - create function that return logged in user.
-export function getLoggedInUser(
-  req: IController,
-  res: IController,
-  next: IController
-) {}
+export async function getLoggedInUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const user = await User.findOne({ _id: (<any>req).user.id });
+  if (!user) return next(new NotFoundError());
+  user.password = "";
+  res.json(user);
+}

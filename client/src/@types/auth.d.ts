@@ -13,10 +13,12 @@ export type RegisterContextType = {
   setAlertMessage: Function;
   setIsAlertMessage: Function;
   setLoginData: Function;
+  isLogin: boolean;
+  setIsLogin: Function;
+  // hundleLogout:Function;
   handleLogin: (event: React.FormEvent<HTMLFormElement>) => {};
   handleRegister: (event: React.FormEvent<HTMLFormElement>) => {};
 };
-
 
 export type AppPropsType = {
   message: string;

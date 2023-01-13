@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 function generateAccessToken({ _id }: any) {
   try {
     return jwt.sign({ id: _id }, String(process.env.ACCESS_TOKEN_SECRET), {
-      expiresIn: new Date(60).getTime(),
+      expiresIn: new Date(432000).getTime(),
     });
   } catch (error) {
     throw error;
@@ -12,7 +12,7 @@ function generateAccessToken({ _id }: any) {
 
 function generateRefreshToken({ _id }: any) {
   try {
-    return jwt.sign({ _id: _id }, String(process.env.ACCESS_TOKEN_SECRET));
+    return jwt.sign({ id: _id }, String(process.env.ACCESS_TOKEN_SECRET));
   } catch (error) {
     throw error;
   }
